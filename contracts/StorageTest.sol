@@ -7,11 +7,14 @@ contract StorageTest {
     uint256 g;
   }
 
+  uint256 data1 = 4;
   mapping(uint256 => A) public testdata;
 
   A public a;
 
   constructor(uint256 b) {
     testdata[1].f = b;
+    a.f = 2;
+    a.g = 5;
   }
 }

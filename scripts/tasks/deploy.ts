@@ -6,7 +6,7 @@ import { saveDeployedContractDetails } from '../utils';
 const contractName = config.contractDetails.StorageTest.name;
 const argus = config.contractDetails.StorageTest.argus;
 
-task('deploy-test', 'deploy test contract').setAction(async (args, hre) => {
+task('test-deploy', 'deploy test contract').setAction(async (args, hre) => {
   const contractFactory = await hre.ethers.getContractFactory(contractName);
   const contract = await contractFactory.deploy(argus[0]);
 
