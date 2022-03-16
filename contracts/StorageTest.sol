@@ -2,12 +2,18 @@
 pragma solidity ^0.8.0;
 
 contract StorageTest {
+
   struct A {
     uint256 f;
     uint256 g;
   }
 
-  uint256 data1 = 4;
+  uint256 public data1 = 4;
+
+  string public stringTest = "a";
+
+  uint[] public array1 = [1,2,3];
+
   mapping(uint256 => A) public testdata;
 
   A public a;
