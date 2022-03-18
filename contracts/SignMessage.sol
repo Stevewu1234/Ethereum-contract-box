@@ -13,8 +13,17 @@ contract SignMessage is ERC20Permit, Ownable {
 
     constructor() ERC20Permit("SignMessage") ERC20("testToken", "TT") {}
 
-    function callWithoutCallerLimit() public {
-        
+    function callWithoutCallerLimit(        address owner, 
+        address spender, 
+        uint256 value,
+        uint256 deadline,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+        ) public {
+
+        permit(owner, spender, value, deadline, v, r, s);
+        user1 = _msgSender();
     }
 
     function callWithCallerLimit(
@@ -26,9 +35,9 @@ contract SignMessage is ERC20Permit, Ownable {
         bytes32 r,
         bytes32 s
         ) public {
-        require(msg.sender == owner, "caller is invalid");
+        require(_msgSender() == owner, "caller is invalid");
 
         permit(owner, spender, value, deadline, v, r, s);
-        
+        user2 = _msgSender();
     }
 }
