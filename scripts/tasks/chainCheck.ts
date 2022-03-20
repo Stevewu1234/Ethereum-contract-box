@@ -3,8 +3,8 @@ import { task } from 'hardhat/config';
 import * as config from '../config';
 import { getABI, readDeployedContractDetails } from '../utils';
 
-task('test', 'just to find contract storage data')
-  .addParam('action', 'select testing function')
+task('chain-check', 'help check chain data')
+  .addParam('action', 'select testing action')
   .setAction(async (args, hre) => {
     if (args === 'storage') {
       // data preparation
