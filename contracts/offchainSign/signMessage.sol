@@ -11,6 +11,8 @@ contract SignMessage is EIP712, Ownable {
     address public user1;
     address public user2;
 
+    uint256 public storedValue;
+
     address public delegateCallContract;
 
     bytes32 private immutable _PERMIT_TYPEHASH =
@@ -39,6 +41,7 @@ contract SignMessage is EIP712, Ownable {
         require(signer == owner, "invalid data");
 
         user1 = _msgSender();
+        storedValue = value;
     }
 
 }
