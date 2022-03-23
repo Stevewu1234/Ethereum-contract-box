@@ -34,3 +34,27 @@ export const readDeployedContractDetails = (
     )
   );
 };
+
+export const readAllDeployedContractDetails = (): object[] => {
+  let fileNames: string[];
+  let details: object[];
+  fs.readdirSync(
+    path.join(__dirname, './data/contractDetails'),
+    'utf-8'
+  ).forEach((fileName) => {
+    fileNames.push(fileName);
+  });
+
+  fileNames.forEach((name) => {
+    const fileJSON = JSON.parse(
+      fs.readFileSync(
+        path.join(__dirname, `./data/contractDetails/${name}.json`),
+        'utf-8'
+      )
+    );
+
+    details.push(fileJSON);
+  });
+
+  return details;
+};
