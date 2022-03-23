@@ -17,6 +17,16 @@ export const getABI = (contractName: string): any[] => {
   return abiPath.abi;
 };
 
+export const getDeploymentArgus = (contractName: string): any[] => {
+  const detailJSON = JSON.parse(
+    fs.readFileSync(
+      path.join(__dirname, './data/contractDetails.json'),
+      'utf-8'
+    )
+  );
+  return detailJSON[contractName].argus;
+};
+
 export const saveDeployedContractDetails = (detail: contractDeployment) => {
   fs.writeFileSync(
     path.join(__dirname, `./data/contractDetails/${detail.name}.json`),
@@ -36,19 +46,16 @@ export const readDeployedContractDetails = (
 };
 
 export const readAllDeployedContractDetails = (): object[] => {
-  let fileNames: string[];
-  let details: object[];
-  fs.readdirSync(
+  const fileNames: string[] = fs.readdirSync(
     path.join(__dirname, './data/contractDetails'),
     'utf-8'
-  ).forEach((fileName) => {
-    fileNames.push(fileName);
-  });
+  );
+  let details: object[];
 
   fileNames.forEach((name) => {
     const fileJSON = JSON.parse(
       fs.readFileSync(
-        path.join(__dirname, `./data/contractDetails/${name}.json`),
+        path.join(__dirname, `./data/deployedContract/${name}.json`),
         'utf-8'
       )
     );
