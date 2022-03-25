@@ -1,8 +1,9 @@
 /* eslint-disable node/no-missing-import */
 import fs from 'fs';
 import path from 'path';
-import { contractDeployment } from './config';
+import { CONTRACTDETAILS } from './config';
 
+// before deployment
 export const getABI = (contractName: string): any[] => {
   const abiPath = JSON.parse(
     fs.readFileSync(
@@ -17,17 +18,19 @@ export const getABI = (contractName: string): any[] => {
   return abiPath.abi;
 };
 
-export const getDeploymentArgus = (contractName: string): any[] => {
+export const getDeploymentArgus = (contractName: string): string[] => {
   const detailJSON = JSON.parse(
-    fs.readFileSync(
-      path.join(__dirname, './data/contractDetails.json'),
-      'utf-8'
-    )
+    fs.readFileSync(path.join(__dirname, './data/contractArgus.json'), 'utf-8')
   );
-  return detailJSON[contractName].argus;
+
+  detailJSON.forEach((name: string) => {
+    if (name === contractName) {
+      return detailJSON[name];
+    }
+  });
 };
 
-export const saveDeployedContractDetails = (detail: contractDeployment) => {
+export const saveDeployedContractDetails = (detail: CONTRACTDETAILS) => {
   fs.writeFileSync(
     path.join(__dirname, `./data/contractDetails/${detail.name}.json`),
     JSON.stringify(detail)
@@ -36,7 +39,7 @@ export const saveDeployedContractDetails = (detail: contractDeployment) => {
 
 export const readDeployedContractDetails = (
   contractName: string
-): contractDeployment => {
+): CONTRACTDETAILS => {
   return JSON.parse(
     fs.readFileSync(
       path.join(__dirname, `./data/contractDetails/${contractName}.json`),
@@ -44,13 +47,13 @@ export const readDeployedContractDetails = (
     )
   );
 };
+export const readAllDeployedContractDetails = (): CONTRACTDETAILS[] => {
+  const details: CONTRACTDETAILS[] = [];
 
-export const readAllDeployedContractDetails = (): object[] => {
   const fileNames: string[] = fs.readdirSync(
     path.join(__dirname, './data/contractDetails'),
     'utf-8'
   );
-  let details: object[];
 
   fileNames.forEach((name) => {
     const fileJSON = JSON.parse(

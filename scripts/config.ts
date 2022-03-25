@@ -1,12 +1,10 @@
-export interface contractDeployment {
+export interface CONTRACTDETAILS {
   name: string;
   address: string;
-  args: any[];
+  args: string[];
 }
 
-export const contractDetails = {
-  StorageTest: {
-    name: 'StorageTest',
-    argus: [3],
-  },
-};
+export interface ARGUS {
+  contractName: string;
+  argus: string[];
+}

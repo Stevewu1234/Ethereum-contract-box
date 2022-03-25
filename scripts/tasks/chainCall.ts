@@ -1,6 +1,7 @@
 /* eslint-disable node/no-missing-import */
 import { task } from 'hardhat/config';
 import {} from 'eip-712';
+import { readAllDeployedContractDetails } from '../utils';
 
 // import * as config from '../config';
 // import { getABI, readDeployedContractDetails } from '../utils';
@@ -41,12 +42,14 @@ task('chain-call', 'help excute function call')
       const signer = await hre.ethers.getSigner(
         '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266'
       );
-      //   console.log(messageHash);
+      console.log(signer.address);
       const signature = await signer._signTypedData(
         message.domain,
         message.types,
         message.message
       );
       console.log(signature);
+      const targetContract = readAllDeployedContractDetails()[0];
+      console.log(targetContract);
     }
   });

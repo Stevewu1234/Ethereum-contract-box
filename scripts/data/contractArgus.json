@@ -1,0 +1,12 @@
+[
+    {
+        "contractName": "StorageTest",
+        "argus": [
+            3
+        ]
+    },
+    {
+        "contractName": "signMessage",
+        "argus": []
+    }
+]
