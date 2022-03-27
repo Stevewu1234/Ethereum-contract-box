@@ -1,30 +1,29 @@
 /* eslint-disable node/no-missing-import */
 import { task } from 'hardhat/config';
 import * as config from '../config';
-import { saveDeployedContractDetails, getDeploymentArgus } from '../utils';
+import * as tools from '../utils';
 
-const argus = config.contractDetails.StorageTest.argus;
+// const argus = config.contractDetails.StorageTest.argus;
 
 task('test-deploy', 'deploy test contract')
   .addParam('contract', 'select contract to deploy')
   .setAction(async (args, hre) => {
-    console.log(args.model);
-    const contractName = args.contractname;
-    const deploymentArgus = getDeploymentArgus(contractName);
-    console.log(deploymentArgus);
+    // get deployment data
+    const contractName: string = args.contract;
+    // const deploymentArgus: any[] = getDeploymentArgus(contractName);
     const contractFactory = await hre.ethers.getContractFactory(contractName);
-    const contract = await contractFactory.deploy(argus[0]);
+    const contract = await contractFactory.deploy();
 
     await contract.deployed();
 
     // save contract details
-    const details: config.contractDeployment = {
+    const details: config.CONTRACTDETAILS = {
       name: contractName,
       address: contract.address,
-      args: argus as any[],
+      args: [],
     };
 
-    saveDeployedContractDetails(details);
+    tools.saveDeployedContractDetails(details);
 
     console.log('deployed:', contract.address);
   });

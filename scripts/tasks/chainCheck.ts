@@ -1,24 +1,21 @@
 /* eslint-disable node/no-missing-import */
 import { task } from 'hardhat/config';
-import * as config from '../config';
-import { getABI, readDeployedContractDetails } from '../utils';
+import * as tools from '../utils';
 
 task('chain-check', 'help check chain data')
-  .addParam('action', 'select testing action')
+  .addParam('contract', 'select contract to check')
   .setAction(async (args, hre) => {
-    if (args === 'storage') {
-      // data preparation
-      const contractname = config.contractDetails.StorageTest.name;
-      const address = readDeployedContractDetails(contractname).address;
-      const abi = getABI(contractname);
-      const provider = hre.ethers.provider;
-      const contract = await new hre.ethers.Contract(address, abi, provider);
+    // data preparation
+    const contractname = args.contract;
+    const address = tools.readDeployedContractDetail(contractname).address;
+    const abi = hre.artifacts.readArtifactSync(contractname).abi;
+    const provider = hre.ethers.provider;
+    const contract = new hre.ethers.Contract(address, abi, provider);
 
-      // data reading
-      const storageData = await hre.ethers.provider.getStorageAt(address, 2);
-      const aValue = await contract.callStatic.a();
+    // data reading
+    const storageData = await hre.ethers.provider.getStorageAt(address, 2);
+    const aValue = await contract.callStatic.a();
 
-      console.log(aValue);
-      console.log(storageData);
-    }
+    console.log(aValue);
+    console.log(storageData);
   });

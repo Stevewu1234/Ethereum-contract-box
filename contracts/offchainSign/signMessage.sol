@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 // todo: check if the msg.sender of the signed message sent by other address is equal to the signer
 // todo: check if the signed message can be used by address to operate signer's value
 
-contract SignMessage is EIP712, Ownable {
+contract signMessage is EIP712, Ownable {
     address public user1;
     address public user2;
 
@@ -16,12 +16,12 @@ contract SignMessage is EIP712, Ownable {
     address public delegateCallContract;
 
     bytes32 private constant PERMIT_TYPEHASH =
-        keccak256("Permit(address owner,uint256 value,uint256 nonce,uint256 deadline)");
+        keccak256("Permit(address owner,uint256 value,uint256 deadline)");
 
     constructor(
-        address delegateCallContract_
-    ) EIP712("SignMessage", "1") {
-        delegateCallContract = delegateCallContract_;
+        // address delegateCallContract_
+    ) EIP712("signMessage", "1") {
+        // delegateCallContract = delegateCallContract_;
     }
 
     // 

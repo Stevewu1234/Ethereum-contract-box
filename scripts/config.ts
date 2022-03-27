@@ -1,10 +1,10 @@
 export interface CONTRACTDETAILS {
   name: string;
   address: string;
-  args: string[];
+  args: any[];
 }
 
 export interface ARGUS {
   contractName: string;
-  argus: string[];
+  argus: any[];
 }
