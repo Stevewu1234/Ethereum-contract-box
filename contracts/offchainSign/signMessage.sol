@@ -28,18 +28,30 @@ contract signMessage is EIP712, Ownable {
     function changeUser1(        
         address owner, 
         uint256 value,
-        uint256 deadline,
-        bytes memory signature
-        ) public {
+        uint256 deadline
+        // bytes memory signature
+        ) public view returns ( bytes32, bytes32, bytes32 ){
 
+        // bytes32 domainHash = keccak256(abi.encode(DOMAIN_HASH, bytes("signMessage"), bytes("1"), 31337, address(this)));
+        bytes32 domainHash = _domainSeparatorV4();
         bytes32 structHash = keccak256(abi.encode(PERMIT_TYPEHASH, owner, value, deadline));
         bytes32 messageHash = _hashTypedDataV4(structHash);
+        
+        // bytes32 testHash = keccak256(bytes("Hello world"));
 
-        address signer = ECDSA.recover(messageHash, signature);
-        require(signer == owner, "invalid data");
+        // address signer = ECDSA.recover(messageHash, signature);
+        // require(signer == owner, "invalid data");
 
-        user1 = _msgSender();
-        storedValue = value;
+        // user1 = _msgSender();
+        // storedValue = value;
+        return (domainHash, structHash, messageHash);
+    }
+
+    function verify(bytes32 message, bytes memory _sig) public pure returns (address) {
+        address signer = ECDSA.recover(message, _sig);
+
+        
+        return signer;
     }
 
 }
