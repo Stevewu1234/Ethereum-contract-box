@@ -23,4 +23,9 @@ contract StorageTest {
     a.f = 2;
     a.g = 5;
   }
+
+  // todo: variables
+  // todo: event
+  // todo: error
+  // todo: function
 }
