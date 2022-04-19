@@ -28,4 +28,15 @@ contract call {
         
         if(success == false) { revert failcall(); }
     }
+
+    function testByCallWithPacked(address _target, address receiver) external {
+        
+
+        bytes memory data = abi.encode(receiver, 1000e18);
+        bytes memory payload = abi.encodePacked(bytes4(keccak256(bytes("transfer(address,uint256)"))), data);
+        (bool success, ) = _target.call(payload);
+
+        require(success, "fail to execute");
+        
+    }
 }
