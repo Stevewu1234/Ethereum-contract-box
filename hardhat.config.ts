@@ -8,7 +8,7 @@ import 'hardhat-gas-reporter';
 import 'solidity-coverage';
 import './scripts/tasks/deploy.ts';
 import './scripts/tasks/chainCheck.ts';
-import './scripts/tasks/chainCall.ts';
+import './scripts/tasks/chain-call.ts';
 
 dotenv.config();
 
