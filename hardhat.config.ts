@@ -9,6 +9,7 @@ import 'solidity-coverage';
 import './scripts/tasks/deploy.ts';
 import './scripts/tasks/chainCheck.ts';
 import './scripts/tasks/chain-call.ts';
+import './scripts/transactionChecker/transactionChecker.ts';
 
 dotenv.config();
 
