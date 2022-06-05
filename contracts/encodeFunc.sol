@@ -596,7 +596,7 @@ contract signMessage is EIP712, Ownable {
 
     }
 
-    function getMsgData(uint256 a) public pure returns (bytes memory) {
+    function getMsgData(uint256 a, string memory b) public pure returns (bytes memory) {
         return msg.data;
     }
 
