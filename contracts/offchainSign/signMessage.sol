@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 // todo: check if the msg.sender of the signed message sent by other address is equal to the signer
 // todo: check if the signed message can be used by address to operate signer's value
 
-contract signMessage is EIP712, Ownable {
+contract SignMessage is EIP712, Ownable {
     address public user1;
     address public user2;
 
@@ -17,50 +17,57 @@ contract signMessage is EIP712, Ownable {
 
     mapping (address => uint) public nonces;
 
+    uint256 public chainId;
+
     // bytes32 private constant PERMIT_TYPEHASH =
     //     keccak256("Permit(address owner,uint256 value,uint256 deadline)");
 
     bytes32 public DOMAIN_SEPARATOR;
-    // bytes32 public constant PERMIT_TYPEHASH = keccak256("Permit(address holder,address spender,uint256 nonce,uint256 expiry,bool allowed)");
-    bytes32 public constant PERMIT_TYPEHASH = 0xea2aa0a1be11a07ed86d755c93467f4f82362b452371d1ba94d1715123511acb;
+    // bytes32 public constant PERMIT_TYPEHASH = keccak256("Permit(address owner,address spender,uint256 nonce,uint256 expiry,bool allowed)");
+    // bytes32 public constant PERMIT_TYPEHASH = 0xea2aa0a1be11a07ed86d755c93467f4f82362b452371d1ba94d1715123511acb;
+    bytes32 public constant PERMIT_TYPEHASH = keccak256("Permit(address owner,uint256 value,uint256 deadline)");
 
     constructor(
-        uint8 chainId_
+        uint256 chainId_
         // address delegateCallContract_
-    ) EIP712("signMessage", "1") {
+    ) EIP712("SignMessage", "1") {
         // delegateCallContract = delegateCallContract_;
 
 
         DOMAIN_SEPARATOR = keccak256(abi.encode(
             keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"),
-            keccak256(bytes("signMessage")),
+            keccak256(bytes("SignMessage")),
             keccak256(bytes("1")),
             chainId_,
             address(this)
         ));
+
+        chainId = chainId_;
     }
 
     // 
-    function changeUser1(        
+    function Permit(        
         address owner, 
         uint256 value,
-        uint256 deadline
-        // bytes memory signature
-        ) public view returns ( bytes32, bytes32, bytes32 ){
+        uint256 deadline,
+        bytes memory signature
+        ) public{
 
         // bytes32 domainHash = keccak256(abi.encode(DOMAIN_HASH, bytes("signMessage"), bytes("1"), 31337, address(this)));
-        bytes32 domainHash = _domainSeparatorV4();
+        // bytes32 domainHash = _domainSeparatorV4();
         bytes32 structHash = keccak256(abi.encode(PERMIT_TYPEHASH, owner, value, deadline));
         bytes32 messageHash = _hashTypedDataV4(structHash);
+        // bytes32 messageHash = keccak256(abi.encodePacked("\x19\x01", domainHash, structHash));
+        // bytes memory message = abi.encodePacked("\x19\x01", DOMAIN_SEPARATOR, structHash);
         
         // bytes32 testHash = keccak256(bytes("Hello world"));
 
-        // address signer = ECDSA.recover(messageHash, signature);
-        // require(signer == owner, "invalid data");
+        address signer = ECDSA.recover(messageHash, signature);
+        require(signer == owner, "invalid data");
 
-        // user1 = _msgSender();
-        // storedValue = value;
-        return (domainHash, structHash, messageHash);
+        user1 = _msgSender();
+        storedValue = value;
+        // return (domainHash, structHash, messageHash, message);
     }
 
     function verify(bytes32 message, bytes memory _sig) public pure returns (address) {
