@@ -15,9 +15,10 @@ the keys you need to notify when you generate a offchain signature:
 - utilize the signer._signTypedData() to sign typedData directly.
 - utilize the signer.signMessage() to sign simple message.
 
-3. generate three type of signature(based on ECDSA.sol)
+3. choose three type of signature(based on ECDSA.sol) to verify onchain
 - type1: bytesLik signature
-- type2: r, s, v signature
-- type3: r, vs signature
+- type2: r, s, v signature => need to split the signature: ethers.utils.splitSignature(signature)
+- type3: r, vs signature => need to split the signature: ethers.utils.splitSignature(signature), and then concat the v,s bytes.
+
 
 

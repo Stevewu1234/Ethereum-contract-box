@@ -8,97 +8,54 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 // todo: check if the signed message can be used by address to operate signer's value
 
 contract SignMessage is EIP712, Ownable {
-    address public user1;
-    address public user2;
+    address public Permit1RecordUser;
+    address public Permit2RecordUser;
 
-    uint256 public storedValue;
-
-    address public delegateCallContract;
-
+    // avoid to multiply call the same func
     mapping (address => uint) public nonces;
-
     uint256 public chainId;
 
-    // bytes32 private constant PERMIT_TYPEHASH =
-    //     keccak256("Permit(address owner,uint256 value,uint256 deadline)");
-
-    bytes32 public DOMAIN_SEPARATOR;
-    // bytes32 public constant PERMIT_TYPEHASH = keccak256("Permit(address owner,address spender,uint256 nonce,uint256 expiry,bool allowed)");
-    // bytes32 public constant PERMIT_TYPEHASH = 0xea2aa0a1be11a07ed86d755c93467f4f82362b452371d1ba94d1715123511acb;
     bytes32 public constant PERMIT_TYPEHASH = keccak256("Permit(address owner,uint256 value,uint256 deadline)");
 
     constructor(
         uint256 chainId_
-        // address delegateCallContract_
     ) EIP712("SignMessage", "1") {
-        // delegateCallContract = delegateCallContract_;
-
-
-        DOMAIN_SEPARATOR = keccak256(abi.encode(
-            keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"),
-            keccak256(bytes("SignMessage")),
-            keccak256(bytes("1")),
-            chainId_,
-            address(this)
-        ));
-
         chainId = chainId_;
     }
 
-    // 
-    function Permit(        
+    // generate a hash message to verify the generated offchain signature
+    function PermitWithValue(        
         address owner, 
         uint256 value,
         uint256 deadline,
         bytes memory signature
-        ) public{
+        ) public {
 
-        // bytes32 domainHash = keccak256(abi.encode(DOMAIN_HASH, bytes("signMessage"), bytes("1"), 31337, address(this)));
-        // bytes32 domainHash = _domainSeparatorV4();
         bytes32 structHash = keccak256(abi.encode(PERMIT_TYPEHASH, owner, value, deadline));
         bytes32 messageHash = _hashTypedDataV4(structHash);
-        // bytes32 messageHash = keccak256(abi.encodePacked("\x19\x01", domainHash, structHash));
-        // bytes memory message = abi.encodePacked("\x19\x01", DOMAIN_SEPARATOR, structHash);
-        
-        // bytes32 testHash = keccak256(bytes("Hello world"));
 
         address signer = ECDSA.recover(messageHash, signature);
         require(signer == owner, "invalid data");
 
-        user1 = _msgSender();
-        storedValue = value;
-        // return (domainHash, structHash, messageHash, message);
+        Permit1RecordUser = _msgSender();
+
+        emit PermittedWithValue(owner, value, deadline);
     }
 
-    function verify(bytes32 message, bytes memory _sig) public pure returns (address) {
-        address signer = ECDSA.recover(message, _sig);
+    // verify the generated offchain signature directly
+    function PermitWithHasedhMessage(
+        bytes32 message, 
+        bytes memory signature
+        ) public {
+        address signer = ECDSA.recover(message, signature);
+        require(signer == msg.sender, "invalid data");
 
-        
-        return signer;
+        Permit2RecordUser = _msgSender();
+
+        emit PermittedWithHashedMessage(signer);
     }
 
-    function permit(address holder, address spender, uint256 nonce, uint256 expiry,
-                    bool allowed, uint8 v, bytes32 r, bytes32 s) external
-    {
-        bytes32 digest =
-            keccak256(abi.encodePacked(
-                "\x19\x01",
-                DOMAIN_SEPARATOR,
-                keccak256(abi.encode(PERMIT_TYPEHASH,
-                                     holder,
-                                     spender,
-                                     nonce,
-                                     expiry,
-                                     allowed))
-        ));
-
-        require(holder != address(0), "Dai/invalid-address-0");
-        require(holder == ecrecover(digest, v, r, s), "Dai/invalid-permit");
-        require(expiry == 0 || block.timestamp <= expiry, "Dai/permit-expired");
-        require(nonce == nonces[holder]++, "Dai/invalid-nonce");
-
-
-        // emit Approval(holder, spender, wad);
-    }
-
+    /** ========== event ========== */
+    event PermittedWithValue(address signer, uint256 value, uint256 deadline);
+    event PermittedWithHashedMessage(address signer);
 }
