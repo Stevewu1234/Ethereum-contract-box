@@ -8,7 +8,6 @@ import 'hardhat-gas-reporter';
 import 'solidity-coverage';
 import './scripts/tasks/deploy.ts';
 import './scripts/tasks/chainCheck.ts';
-import './scripts/tasks/chain-call.ts';
 import './scripts/transactionChecker/transactionChecker.ts';
 
 dotenv.config();
@@ -27,7 +26,16 @@ task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
 // Go to https://hardhat.org/config/ to learn more
 
 const config: HardhatUserConfig = {
-  solidity: '0.8.4',
+  solidity: {
+    compilers: [
+      {
+        version: '0.8.4',
+      },
+      {
+        version: '0.5.12',
+      },
+    ],
+  },
   networks: {
     ropsten: {
       url: process.env.ROPSTEN_URL || '',
@@ -38,6 +46,7 @@ const config: HardhatUserConfig = {
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
     currency: 'USD',
+    coinmarketcap: process.env.COINMARKETCAT,
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
