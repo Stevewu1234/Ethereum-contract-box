@@ -1,11 +1,21 @@
-# create the basic project for reference
+## A learning record of contract and etherjs interaction.
 
-Try running some of the following tasks:
+***It's my pleasure if this repo can help anyone who is planning to step into ethereum dApp development.***
 
-```shell
-// contract deployment
-npx hardhat deploy-test
+### contract sign messageHash generation and signature verify
 
-// testing details
-npx hardhat test-Storage
-```
+the keys you need to notify when you generate a offchain signature:
+
+1. check signing message and hashed message
+- use ethers.utils._TypedDataEncoder.encode() to encode signing message.
+- use ethers.utils.keccak256() to hash encoded message.
+
+2. sign typed data directly
+- utilize the signer._signTypedData() to sign typedData directly.
+
+3. generate three type of signature(based on ECDSA.sol)
+- type1: bytesLik signature
+- type2: r, s, v signature
+- type3: r, vs signature
+
+
