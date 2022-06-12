@@ -34,7 +34,7 @@ const eip712Call = async () => {
    */
 
   // basic info
-  const [signer1] = await ethers.getSigners();
+  const [signer1, signer2] = await ethers.getSigners();
 
   const currentBlockNumber = await ethers.provider.getBlockNumber();
   const currentBlock = await ethers.provider.getBlock(currentBlockNumber);
@@ -48,23 +48,22 @@ const eip712Call = async () => {
   domain.verifyingContract = signMessageContract.address;
   domain.chainId = chainId;
   message.deadline = currentTime;
-  message.owner = signer1.address;
+  message.owner = signer2.address;
 
   const encoder = hre.ethers.utils._TypedDataEncoder;
   const Message = encoder.encode(domain, types, message);
   const messageHash = ethers.utils.keccak256(Message);
 
-  // const funcResult = await signMessageContract.Permit(
-  //   signer1.address,
-  //   message.value,
-  //   message.deadline
-  // );
+  const signature = await signer2._signTypedData(domain, types, message);
 
-  console.log('local message:', Message);
-  console.log('local typedDataHash: ', messageHash);
+  await signMessageContract
+    .connect(signer2)
+    .permitWithHasedhMessage(messageHash, signature);
 
-  // console.log('contract message: ', funcResult[3]);
-  // console.log('messageHash: ', funcResult[2]);
+  console.log(await signMessageContract.Permit1RecordUser());
+
+  console.log(`signer1: ${signer1.address}`);
+  console.log(`signer2: ${signer2.address}`);
 };
 
 (async () => {

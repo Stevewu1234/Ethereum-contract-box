@@ -24,7 +24,7 @@ contract SignMessage is EIP712, Ownable {
     }
 
     // generate a hash message to verify the generated offchain signature
-    function PermitWithValue(        
+    function permitWithValue(        
         address owner, 
         uint256 value,
         uint256 deadline,
@@ -43,7 +43,7 @@ contract SignMessage is EIP712, Ownable {
     }
 
     // verify the generated offchain signature directly
-    function PermitWithHasedhMessage(
+    function permitWithHasedhMessage(
         bytes32 message, 
         bytes memory signature
         ) public {
