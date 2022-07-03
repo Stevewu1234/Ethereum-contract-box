@@ -14,12 +14,12 @@ contract SignContract is EIP712, Ownable {
     // avoid to multiply call the same func
     mapping (address => uint) public nonces;
 
-    bytes32 public constant PERMIT_TYPEHASH = keccak256("Permit(address owner,uint256 value,uint256 deadline)");
+    bytes32 public constant PERMIT_TYPEHASH = keccak256("PermitWithValue(address owner,uint256 value,uint256 deadline)");
 
     constructor() EIP712("SignContract", "1") {}
 
     // generate a hash message to verify the generated offchain signature
-    function Permit(        
+    function PermitWithValue(        
         address owner, 
         uint256 value,
         uint256 deadline,
