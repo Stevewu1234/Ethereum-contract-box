@@ -10,7 +10,7 @@ import hre, { ethers } from 'hardhat';
 // import { signDaiPermit } from 'eth-permit-ethers';
 
 const types = {
-  Permit: [
+  PermitWithValue: [
     { name: 'owner', type: 'address' },
     { name: 'value', type: 'uint256' },
     { name: 'deadline', type: 'uint256' },
