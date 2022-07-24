@@ -63,22 +63,6 @@ describe('sign contract verify off-chain signature', () => {
   
     const signature = await signer1._signTypedData(domain, types, message);
 
-    const encoder = hre.ethers.utils._TypedDataEncoder;
-    const domainHash = encoder.hashDomain(domain);
-    const structHash = encoder.hashStruct('PermitWithValue', types, message);
-    const messageHash = encoder.hash(domain, types, message); 
-
-    console.log('logic domain hash: ', domainHash)
-    console.log('logic struct hash: ', structHash);
-    console.log('logic message hash: ', messageHash);
-
-    console.log('contract signature message: ', await signContract.testSignatureMessage(      
-      message.owner,
-      message.value,
-      message.testString,
-      message.deadline
-      ))
-
     await signContract.connect(signer1).PermitWithValue(
       message.owner,
       message.value,
