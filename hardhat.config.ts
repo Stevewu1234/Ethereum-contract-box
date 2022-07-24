@@ -6,8 +6,8 @@ import '@nomiclabs/hardhat-waffle';
 import '@typechain/hardhat';
 import 'hardhat-gas-reporter';
 import 'solidity-coverage';
-import './scripts/tasks/deploy.ts';
-import './scripts/tasks/chainCheck.ts';
+import './tasks/deploy.ts';
+import './tasks/chainCheck.ts';
 import './scripts/transactionChecker/transactionChecker.ts';
 
 dotenv.config();

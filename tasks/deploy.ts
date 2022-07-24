@@ -1,7 +1,7 @@
 /* eslint-disable node/no-missing-import */
 import { task } from 'hardhat/config';
-import * as config from '../config';
-import * as tools from '../utils';
+import * as config from '../scripts/config';
+import * as tools from '../scripts/utils';
 
 // const argus = config.contractDetails.StorageTest.argus;
 

@@ -1,6 +1,6 @@
 /* eslint-disable node/no-missing-import */
 import { task } from 'hardhat/config';
-import * as tools from '../utils';
+import * as tools from '../scripts/utils';
 
 task('chain-check', 'help check chain data')
   .addParam('contract', 'select contract to check')
