@@ -65,18 +65,6 @@ const typedataSign = async () => {
 
   const signature1 = await signer1._signTypedData(domain, types, message);
 
-  // @dev the point of verifying the signature with value is if there is a string value,
-  // need to deal with the value on contract with keccak256(bytes('yourstringValue'));
-  await signMessageContract.connect(signer1).PermitWithValue(
-    message.owner,
-    message.value,
-    message.testString,
-    message.deadline,
-    signature1
-  );
-
-  console.log(await signMessageContract.Permit1RecordUser());
-
   console.log('logic domain hash: ', domainHash)
   console.log('logic struct hash: ', structHash);
   console.log('logic message hash: ', messageHash);
@@ -88,6 +76,16 @@ const typedataSign = async () => {
     message.deadline
     ));
 
+
+  // @dev the point of verifying the signature with value is if there is a string value,
+  // need to deal with the value on contract with keccak256(bytes('yourstringValue'));
+  await signMessageContract.connect(signer1).PermitWithValue(
+    message.owner,
+    message.value,
+    message.testString,
+    message.deadline,
+    signature1
+  );
 
   // call PermitWithHashedMessage()
   const signature2 = await signer2._signTypedData(domain, types, message);
