@@ -62,17 +62,12 @@ const typedataSign = async () => {
   const domainHash = encoder.hashDomain(domain);
   const structHash = encoder.hashStruct('PermitWithValue', types, message);
   const messageHash = encoder.hash(domain, types, message);
-  const messageHashWithoutEtherjs = hre.ethers.utils.keccak256(Buffer.concat([
+  const messageHash_hexConcat = hre.ethers.utils.keccak256(hre.ethers.utils.hexConcat([
     Buffer.from('1901', 'hex'),
-    Buffer.from(domainHash),
-    Buffer.from(structHash)
+    domainHash,
+    structHash
   ]))
 
-  console.log(Buffer.concat([
-    Buffer.from('1901', 'hex'),
-    Buffer.from(domainHash),
-    Buffer.from(structHash)
-  ]))
 
 
   const signature1 = await signer1._signTypedData(domain, types, message);
@@ -80,7 +75,7 @@ const typedataSign = async () => {
   console.log('local domain hash: ', domainHash)
   console.log('local struct hash: ', structHash);
   console.log('local message hash: ', messageHash);
-  console.log('local message hash without etherjs generator: ', messageHashWithoutEtherjs);
+  console.log('local message hash without etherjs hash generator: ', messageHash_hexConcat);
 
   console.log('contract signature message: ', await signMessageContract.testSignatureMessage(      
     message.owner,
