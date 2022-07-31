@@ -68,8 +68,6 @@ const typedataSign = async () => {
     structHash
   ]))
 
-
-
   const signature1 = await signer1._signTypedData(domain, types, message);
 
   console.log('local domain hash: ', domainHash)
