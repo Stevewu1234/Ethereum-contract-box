@@ -1,18 +1,16 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract test {
-
-    uint public reward;
+contract Test {
+    uint256 public reward;
     address public caller;
 
-    event callByDelegate(address caller);
+    event CallByDelegate(address caller);
 
-    function set(uint _reward) external {
+    function set(uint256 _reward) external {
         caller = msg.sender;
         reward = _reward;
 
-        emit callByDelegate(msg.sender);
-
+        emit CallByDelegate(msg.sender);
     }
-
 }
