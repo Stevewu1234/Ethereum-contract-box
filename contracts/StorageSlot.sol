@@ -1,7 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract StorageSLot {
+contract test1 {}
+
+contract test2 {}
+
+contract StorageSLot is test2 {
     // dynamic types
     bytes public testBytes;
     string public stringTest = "a";
@@ -36,6 +40,36 @@ contract StorageSLot {
         testdata[1].f = b;
         a.f = 2;
         a.g = 5;
+    }
+
+    // =========== check global available Variables ==========
+    function contractName() external pure returns (string memory) {
+        return type(StorageSLot).name;
+    }
+
+    function contractByteCode() external pure returns (bytes memory) {
+        return type(test1).creationCode; // only allowed to access byteCode of another contract
+        // return type(test2).creationCode; // inherited contract is not referring
+        // return type(StorageSlot).creationCode // not referring
+    }
+
+    function contractRuntimeCode() external pure returns (bytes memory) {
+        return type(test1).runtimeCode;
+    }
+
+    // the encode between dynamic type "bytes" and static type "bytes3" or "bytes32" ...
+    function encodeBytes(bytes3 name) external pure returns (bytes memory) {
+        bytes4 selector = bytes4(keccak256(abi.encode("encodeBytes(bytes3)")));
+        return abi.encodeWithSelector(selector, name);
+    }
+
+    function encodeBytes(string memory name)
+        external
+        pure
+        returns (bytes memory)
+    {
+        bytes4 selector = bytes4(keccak256(abi.encode("encodeBytes(bytes3)")));
+        return abi.encodeWithSelector(selector, name);
     }
 
     // todo: variables
