@@ -18,12 +18,12 @@ let domain = {
   verifyingContract: '',
 };
 const types = {
-  PermitWithValue: [
+  permitWithValue: [
     { name: 'owner', type: 'address' },
     { name: 'value', type: 'uint256' },
-    { name: 'testString', type: 'string'},
+    { name: 'testString', type: 'string' },
     { name: 'deadline', type: 'uint256' },
-    { name: 'nonce', type: 'uint256'}
+    { name: 'nonce', type: 'uint256' },
   ],
 };
 let message = {
@@ -31,7 +31,7 @@ let message = {
   value: 0,
   testString: '',
   deadline: 0,
-  nonce: 0
+  nonce: 0,
 };
 
 beforeEach(async () => {
@@ -43,7 +43,9 @@ beforeEach(async () => {
   const deadline = currentBlock.timestamp + 3600; // duration is 1 hour
 
   // deploy signMessage contract
-  const signMessageFactory = await hre.ethers.getContractFactory('SignTestContract');
+  const signMessageFactory = await hre.ethers.getContractFactory(
+    'SignTestContract'
+  );
   signContract = await signMessageFactory.deploy();
   await signContract.deployed();
 
@@ -51,7 +53,6 @@ beforeEach(async () => {
   domain.chainId = blockChainId;
   domain.verifyingContract = signContract.address;
   message.deadline = deadline;
-
 });
 
 describe('sign contract verify off-chain signature', () => {
@@ -59,32 +60,34 @@ describe('sign contract verify off-chain signature', () => {
     message.owner = signer1.address;
     message.value = 1;
     message.testString = 'sign with PermitWithValue()';
-    message.nonce = BigNumber.from(await signContract.nonce(signer1.address)).toNumber();
-  
+    message.nonce = BigNumber.from(
+      await signContract.nonce(signer1.address)
+    ).toNumber();
+
     const signature = await signer1._signTypedData(domain, types, message);
 
-    await signContract.connect(signer1).PermitWithValue(
-      message.owner,
-      message.value,
-      message.testString,
-      message.deadline,
-      signature
-    );
+    await signContract
+      .connect(signer1)
+      .PermitWithValue(
+        message.owner,
+        message.value,
+        message.testString,
+        message.deadline,
+        signature
+      );
 
     // check sign success or not
     expect(await signContract.Permit1RecordUser()).to.equal(signer1.address);
     expect(await signContract.testString()).to.equal(message.testString);
   });
   it('call PermitWithHashedMessage()', async () => {
-
     const encoder = hre.ethers.utils._TypedDataEncoder;
-    const messageHash = encoder.hash(domain, types, message); 
+    const messageHash = encoder.hash(domain, types, message);
     const signature = await signer2._signTypedData(domain, types, message);
 
-    await signContract.connect(signer2).permitWithHasedhMessage(
-      messageHash,
-      signature
-    );
+    await signContract
+      .connect(signer2)
+      .permitWithHasedhMessage(messageHash, signature);
 
     // check sign success or not
     expect(await signContract.Permit2RecordUser()).to.equal(signer2.address);
