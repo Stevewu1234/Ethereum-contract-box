@@ -47,7 +47,7 @@ contract StorageSLot is test2 {
         return type(StorageSLot).name;
     }
 
-    function contractByteCode() external pure returns (bytes memory) {
+    function contractCreationCode() external pure returns (bytes memory) {
         return type(test1).creationCode; // only allowed to access byteCode of another contract
         // return type(test2).creationCode; // inherited contract is not referring
         // return type(StorageSlot).creationCode // not referring
@@ -58,12 +58,12 @@ contract StorageSLot is test2 {
     }
 
     // the encode between dynamic type "bytes" and static type "bytes3" or "bytes32" ...
-    function encodeBytes(bytes3 name) external pure returns (bytes memory) {
+    function encodeBytes3(bytes3 name) external pure returns (bytes memory) {
         bytes4 selector = bytes4(keccak256(abi.encode("encodeBytes(bytes3)")));
         return abi.encodeWithSelector(selector, name);
     }
 
-    function encodeBytes(string memory name)
+    function encodeString(string memory name)
         external
         pure
         returns (bytes memory)
