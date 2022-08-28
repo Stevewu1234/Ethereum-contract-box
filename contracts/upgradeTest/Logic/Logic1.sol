@@ -16,4 +16,6 @@ contract Logic1 is LogicStoreage, Initializable {
     function updateString(string memory _newString) external {
         initialString = _newString;
     }
+
+    // todo: test tx.origin and msg.sender
 }
