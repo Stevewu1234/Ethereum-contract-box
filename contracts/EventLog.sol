@@ -6,6 +6,8 @@ contract EeventLog {
         uint256 number1;
     }
 
+    mapping(address => Test) public mappingTest;
+
     event SimpleTransfer(
         address indexed sender,
         address indexed receiver,
@@ -16,5 +18,5 @@ contract EeventLog {
 
     event NumberRecord(address indexed account, uint256 number);
 
-    event StructRecord(address indexed account, Test test);
+    event MapRecord(address indexed account, Test test);
 }
