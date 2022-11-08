@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract LogicStoreage {
-    uint256 public initialUint;
+contract LogicState {
+    uint256 public number1;
     string public initialString;
 
     mapping(uint256 => string) public uToString;

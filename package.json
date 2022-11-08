@@ -43,6 +43,7 @@
     "@openzeppelin/contracts-upgradeable": "^4.7.3",
     "eip-712": "^1.0.0",
     "eth-crypto": "^2.2.0",
-    "eth-permit-ethers": "^0.2.1"
+    "eth-permit-ethers": "^0.2.1",
+    "merkle-distributor-array": "^1.0.10"
   }
 }

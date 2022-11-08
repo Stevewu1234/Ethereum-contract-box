@@ -2,15 +2,17 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
-import "./LogicStorage.sol";
+import "./LogicState.sol";
 
-contract Logic1 is LogicStoreage, Initializable {
-    function logicInit() external initializer {
-        initialUint;
+contract Logic1 is LogicState, Initializable {
+    function logicInit(uint256 _initialNumber) external initializer {
+        number1 = _initialNumber;
     }
 
     function updateUint(uint256 _newNumber) external {
-        initialUint = _newNumber;
+        number1 = _newNumber;
+
+        emit Number1Updated(_newNumber);
     }
 
     function updateString(string memory _newString) external {
@@ -18,4 +20,7 @@ contract Logic1 is LogicStoreage, Initializable {
     }
 
     // todo: test tx.origin and msg.sender
+
+    // test event calling from proxy contract
+    event Number1Updated(uint256 updatedNumber);
 }

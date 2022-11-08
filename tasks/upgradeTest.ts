@@ -6,7 +6,7 @@ let proxy: ProxyTest;
 let proxyAdmin: ProxyTestAdmin;
 let logic1: Logic1;
 
-const evnetTest = async () => {
+before('deploy proxy contract', async () => {
   // deploy logic1
   const logic1Factory = await hre.ethers.getContractFactory('Logic1');
   logic1 = await logic1Factory.deploy();
@@ -21,25 +21,13 @@ const evnetTest = async () => {
 
   // deploy proxy
   // get initial data
-  const logicInterface = new hre.ethers.utils.Interface(
-    hre.artifacts.readArtifactSync('Logic1').abi
+  const data = new hre.ethers.utils.Interface('Logic1').encodeFunctionData(
+    'logicInit',
+    [BigNumber.from(1)]
   );
-  const data = logicInterface.encodeFunctionData('logicInit', [
-    BigNumber.from(1),
-  ]);
   const proxyFactory = await hre.ethers.getContractFactory('ProxyTest');
   proxy = await proxyFactory.deploy(logic1.address, proxyAdmin.address, data);
   await proxy.deployed();
+});
 
-  // check event
-  const newNumber2 = BigNumber.from(2);
-  const proxyWithLogic = logic1.attach(proxy.address);
-  const updateTx = await proxyWithLogic.updateUint(newNumber2);
-
-  const events = (await updateTx.wait()).events;
-  console.log(events![0].args);
-};
-
-(async () => {
-  await evnetTest();
-})();
+describe('test to acquire logic event log from proxy', async () => {});
